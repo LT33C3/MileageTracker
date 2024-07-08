@@ -1,7 +1,6 @@
 import csv
 import io
 import os
-import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -17,6 +16,12 @@ from database import Database
 from location_service import LocationService
 from datetime import datetime
 from config import EmailConfig
+
+# Conditional import for smtplib
+try:
+    import smtplib
+except ImportError:
+    smtplib = None
 
 class MileageTrackerApp(App):
     def build(self):
@@ -148,6 +153,10 @@ class MileageTrackerApp(App):
             self.status_label.text = f'Failed to save report: {str(e)}'
 
     def email_csv_report(self, instance):
+        if smtplib is None:
+            self.status_label.text = 'Email functionality not available on this platform'
+            return
+
         journeys = self.db.get_journeys()
         
         # Create CSV in memory
