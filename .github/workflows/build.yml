@@ -37,6 +37,11 @@ jobs:
             libavcodec-dev \
             zlib1g-dev
 
+      - name: Set up Android SDK and NDK
+        run: |
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;25.2.9519653"
+          echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/25.2.9519653" >> $GITHUB_ENV
+
       - name: Build with Buildozer
         run: |
           buildozer android debug
@@ -51,5 +56,5 @@ jobs:
 
       - name: Update config.py
         run: |
-          sed -i 's/YOUR_GOOGLE_MAPS_API_KEY/${{ secrets.MAPS_API_KEY }}/g' config.py
+          sed -i 's/YOUR_GOOGLE_MAPS_API_KEY/${{ secrets.AIzaSyBL6nI8QSaM2reT_dffcogQflUmw9FUNBM }}/g' config.py
           sed -i 's/your_app_password/${{ secrets.EMAIL_PASSWORD }}/g' config.py
