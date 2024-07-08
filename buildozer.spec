@@ -5,7 +5,7 @@ package.domain = org.test
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
-requirements = python3==3.9.16,kivy==2.1.0,requirements.txt
+requirements = python3==3.9.16,kivy==2.1.0
 orientation = portrait
 osx.python_version = 3
 osx.kivy_version = 2.1.0
@@ -49,14 +49,12 @@ sdl2_version = 2.0.22
 
 # Other options
 allow_download = True
-log_level = 2
 
 # Specify the Android NDK version
 android.ndk_api = 21
 
 # Specify the Java max heap size
 android.gradle_daemon = True
-android.accept_sdk_license = True
 android.use_internet = True
 
 # Enable AAPT2
