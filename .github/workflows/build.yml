@@ -10,60 +10,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.8'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install buildozer Cython==0.29.33
-          sudo apt-get update
-          sudo apt-get install -y \
-            python3-pip \
-            build-essential \
-            git \
-            python3 \
-            python3-dev \
-            ffmpeg \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            zlib1g-dev
-
-      - name: Set up Android SDK and NDK
-        run: |
-          ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
-          echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/25.2.9519653" >> $GITHUB_ENV
-
       - name: Build with Buildozer
-        run: |
-          buildozer android debug
-        env:
-          BUILDOZER_WARN_ON_ROOT: 0
-
-      - name: Upload build logs
-        uses: actions/upload-artifact@v4
-        if: always()
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
         with:
-          name: buildozer-logs
-          path: |
-            .buildozer/android/platform/build-armeabi-v7a/build/other_builds/*/android/build.log
-            .buildozer/android/platform/build-armeabi-v7a/build/other_builds/*/android/gradlew.log
+          workdir: .
+          buildozer_version: stable
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: package
-          path: bin/*.apk
-
-      - name: Update config.py
-        run: |
-          sed -i 's/YOUR_GOOGLE_MAPS_API_KEY/${{ secrets.AIzaSyBL6nI8QSaM2reT_dffcogQflUmw9FUNBM }}/g' config.py
-          sed -i 's/your_app_password/${{ secrets.EMAIL_PASSWORD }}/g' config.py
+          path: ${{ steps.buildozer.outputs.filename }}
