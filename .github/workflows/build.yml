@@ -48,6 +48,15 @@ jobs:
         env:
           BUILDOZER_WARN_ON_ROOT: 0
 
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buildozer-logs
+          path: |
+            .buildozer/android/platform/build-armeabi-v7a/build/other_builds/*/android/build.log
+            .buildozer/android/platform/build-armeabi-v7a/build/other_builds/*/android/gradlew.log
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
